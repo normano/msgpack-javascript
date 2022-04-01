@@ -601,13 +601,13 @@ export class Decoder<ContextType = undefined> {
     return value;
   }
 
-  private readU64(): number {
+  private readU64(): number | bigint {
     const value = getUint64(this.view, this.pos);
     this.pos += 8;
     return value;
   }
 
-  private readI64(): number {
+  private readI64(): number | bigint {
     const value = getInt64(this.view, this.pos);
     this.pos += 8;
     return value;

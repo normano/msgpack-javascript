@@ -1,6 +1,6 @@
 import { utf8EncodeJs, utf8Count, TEXT_ENCODER_THRESHOLD, utf8EncodeTE } from "./utils/utf8";
 import { ExtensionCodec, ExtensionCodecType } from "./ExtensionCodec";
-import { setInt64, setUint64 } from "./utils/int";
+import { setInt64, setUint64, setBInt64, setBUint64, BIGINT64_MAX, BIGINT64_MIN, BIGUINT64_MAX } from "./utils/int";
 import { ensureUint8Array } from "./utils/typedArrays";
 import type { ExtData } from "./ExtData";
 
@@ -46,6 +46,8 @@ export class Encoder<ContextType = undefined> {
       this.encodeNil();
     } else if (typeof object === "boolean") {
       this.encodeBoolean(object);
+    } else if (typeof object === "bigint") {
+      this.encodeBigInt(object, depth);
     } else if (typeof object === "number") {
       this.encodeNumber(object);
     } else if (typeof object === "string") {
@@ -85,6 +87,33 @@ export class Encoder<ContextType = undefined> {
       this.writeU8(0xc3);
     }
   }
+
+  private encodeBigInt(object: bigint, depth: number) {
+    //NOTE: encodeObject is used to handle numbers out of range. Someday arbitrary precision integers can be a thing.
+
+    if(object >= 0) {
+      if(object <= BIGINT64_MAX) {
+        // int 64
+        this.writeU8(0xd3);
+        this.writeBI64(object);
+      } else if(object <= BIGUINT64_MAX) {
+        // uint 64
+        this.writeU8(0xcf);
+        this.writeBU64(object);
+      } else {
+        this.encodeObject(object, depth);
+      }
+    } else {
+      if(object >= BIGINT64_MIN) {
+        // int 64
+        this.writeU8(0xd3);
+        this.writeBI64(object);
+      } else {
+        this.encodeObject(object, depth);
+      }
+    }
+  }
+
   private encodeNumber(object: number) {
     if (Number.isSafeInteger(object) && !this.forceIntegerToFloat) {
       if (object >= 0) {
@@ -383,6 +412,20 @@ export class Encoder<ContextType = undefined> {
   private writeF64(value: number) {
     this.ensureBufferSizeToWrite(8);
     this.view.setFloat64(this.pos, value);
+    this.pos += 8;
+  }
+
+  private writeBU64(value: bigint) {
+    this.ensureBufferSizeToWrite(8);
+
+    setBUint64(this.view, this.pos, value);
+    this.pos += 8;
+  }
+
+  private writeBI64(value: bigint) {
+    this.ensureBufferSizeToWrite(8);
+
+    setBInt64(this.view, this.pos, value);
     this.pos += 8;
   }
 
