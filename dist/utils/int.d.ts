@@ -1,0 +1,14 @@
+export declare const UINT32_MAX = 4294967295;
+export declare const BIGUINT64_MAX: bigint;
+export declare const BIGINT64_MIN: bigint;
+export declare const BIGINT64_MAX: bigint;
+export declare const BIG_MIN_SAFE_INTEGER: bigint;
+export declare const BIG_MAX_SAFE_INTEGER: bigint;
+export declare function isBUInt64(value: bigint): boolean;
+export declare function isBInt64(value: bigint): boolean;
+export declare function setBUint64(view: DataView, offset: number, value: bigint): void;
+export declare function setBInt64(view: DataView, offset: number, value: bigint): void;
+export declare function setUint64(view: DataView, offset: number, value: number): void;
+export declare function setInt64(view: DataView, offset: number, value: number): void;
+export declare function getInt64(view: DataView, offset: number): number | bigint;
+export declare function getUint64(view: DataView, offset: number): number | bigint;
