@@ -1207,7 +1207,7 @@ var __asyncGenerator = (undefined && undefined.__asyncGenerator) || function (th
 
 var isValidMapKeyType = function (key) {
     var keyType = typeof key;
-    return keyType === "string" || keyType === "number";
+    return keyType === "string" || keyType === "number" || keyType == "bigint";
 };
 var HEAD_BYTE_REQUIRED = -1;
 var EMPTY_VIEW = new DataView(new ArrayBuffer(0));

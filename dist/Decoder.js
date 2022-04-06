@@ -10,7 +10,7 @@ const CachedKeyDecoder_1 = require("./CachedKeyDecoder");
 const DecodeError_1 = require("./DecodeError");
 const isValidMapKeyType = (key) => {
     const keyType = typeof key;
-    return keyType === "string" || keyType === "number";
+    return keyType === "string" || keyType === "number" || keyType == "bigint";
 };
 const HEAD_BYTE_REQUIRED = -1;
 const EMPTY_VIEW = new DataView(new ArrayBuffer(0));
