@@ -9,14 +9,14 @@ on:
 
 jobs:
   nodejs:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version:
           - '12'
           - '14'
           - '16'
-          - '17'
+          - '18'
 
     steps:
     - uses: actions/checkout@v3
@@ -33,7 +33,7 @@ jobs:
     - run: codecov -f coverage/*.json
 
   browser:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         browser: [ChromeHeadless, FirefoxHeadless]

@@ -1,7 +1,7 @@
 // kind of hand-written fuzzing data
 // any errors should not break Encoder/Decoder instance states
 import assert from "assert";
-import { encode, decode, Encoder, Decoder } from "../src";
+import { encode, decodeAsync, decode, Encoder, Decoder, decodeMulti, decodeMultiStream } from "../src";
 import { DataViewIndexOutOfBoundsError } from "../src/Decoder";
 
 function testEncoder(encoder: Encoder): void {
@@ -145,6 +145,40 @@ describe("edge cases", () => {
         await decoder.decodeAsync(createStream());
       }, RangeError);
       testDecoder(decoder);
+    });
+  });
+
+  context("try to decode an empty input", () => {
+    it("throws RangeError (synchronous)", () => {
+      assert.throws(() => {
+        decode([]);
+      }, RangeError);
+    });
+
+    it("decodes an empty array with decodeMulti()", () => {
+      assert.deepStrictEqual([...decodeMulti([])], []);
+    });
+
+    it("throws RangeError (asynchronous)", async () => {
+      const createStream = async function* () {
+        yield [];
+      };
+
+      assert.rejects(async () => {
+        await decodeAsync(createStream());
+      }, RangeError);
+    });
+
+    it("decodes an empty array with decodeMultiStream()", async () => {
+      const createStream = async function* () {
+        yield [];
+      };
+
+      const results: Array<unknown> = [];
+      for await (const item of decodeMultiStream(createStream())) {
+        results.push(item);
+      }
+      assert.deepStrictEqual(results, []);
     });
   });
 });
