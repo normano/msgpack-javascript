@@ -23,8 +23,8 @@ export declare class Decoder<ContextType = undefined> {
     private hasRemaining;
     private createExtraByteError;
     /**
-     * @throws {DecodeError}
-     * @throws {RangeError}
+     * @throws {@link DecodeError}
+     * @throws {@link RangeError}
      */
     decode(buffer: ArrayLike<number> | BufferSource): unknown;
     decodeMulti(buffer: ArrayLike<number> | BufferSource): Generator<unknown, void, unknown>;

@@ -11,7 +11,7 @@ const defaultEncodeOptions = {};
  */
 function encode(value, options = defaultEncodeOptions) {
     const encoder = new Encoder_1.Encoder(options.extensionCodec, options.context, options.maxDepth, options.initialBufferSize, options.sortKeys, options.forceFloat32, options.ignoreUndefined, options.forceIntegerToFloat);
-    return encoder.encode(value);
+    return encoder.encodeSharedRef(value);
 }
 exports.encode = encode;
 //# sourceMappingURL=encode.js.map

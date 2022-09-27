@@ -21,16 +21,26 @@ class Encoder {
         this.view = new DataView(new ArrayBuffer(this.initialBufferSize));
         this.bytes = new Uint8Array(this.view.buffer);
     }
-    getUint8Array() {
-        return this.bytes.subarray(0, this.pos);
-    }
     reinitializeState() {
         this.pos = 0;
     }
+    /**
+     * This is almost equivalent to {@link Encoder#encode}, but it returns an reference of the encoder's internal buffer and thus much faster than {@link Encoder#encode}.
+     *
+     * @returns Encodes the object and returns a shared reference the encoder's internal buffer.
+     */
+    encodeSharedRef(object) {
+        this.reinitializeState();
+        this.doEncode(object, 1);
+        return this.bytes.subarray(0, this.pos);
+    }
+    /**
+     * @returns Encodes the object and returns a copy of the encoder's internal buffer.
+     */
     encode(object) {
         this.reinitializeState();
         this.doEncode(object, 1);
-        return this.getUint8Array();
+        return this.bytes.slice(0, this.pos);
     }
     doEncode(object, depth) {
         if (depth > this.maxDepth) {

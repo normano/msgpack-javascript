@@ -80,8 +80,8 @@ class Decoder {
         return new RangeError(`Extra ${view.byteLength - pos} of ${view.byteLength} byte(s) found at buffer[${posToShow}]`);
     }
     /**
-     * @throws {DecodeError}
-     * @throws {RangeError}
+     * @throws {@link DecodeError}
+     * @throws {@link RangeError}
      */
     decode(buffer) {
         this.reinitializeState();
@@ -380,7 +380,7 @@ class Decoder {
             while (stack.length > 0) {
                 // arrays and maps
                 const state = stack[stack.length - 1];
-                if (state.type === 0 /* ARRAY */) {
+                if (state.type === 0 /* State.ARRAY */) {
                     state.array[state.position] = object;
                     state.position++;
                     if (state.position === state.size) {
@@ -391,7 +391,7 @@ class Decoder {
                         continue DECODE;
                     }
                 }
-                else if (state.type === 1 /* MAP_KEY */) {
+                else if (state.type === 1 /* State.MAP_KEY */) {
                     if (!isValidMapKeyType(object)) {
                         throw new DecodeError_1.DecodeError("The type of key must be string or number but " + typeof object);
                     }
@@ -399,7 +399,7 @@ class Decoder {
                         throw new DecodeError_1.DecodeError("The key __proto__ is not allowed");
                     }
                     state.key = object;
-                    state.type = 2 /* MAP_VALUE */;
+                    state.type = 2 /* State.MAP_VALUE */;
                     continue DECODE;
                 }
                 else {
@@ -412,7 +412,7 @@ class Decoder {
                     }
                     else {
                         state.key = null;
-                        state.type = 1 /* MAP_KEY */;
+                        state.type = 1 /* State.MAP_KEY */;
                         continue DECODE;
                     }
                 }
@@ -452,7 +452,7 @@ class Decoder {
             throw new DecodeError_1.DecodeError(`Max length exceeded: map length (${size}) > maxMapLengthLength (${this.maxMapLength})`);
         }
         this.stack.push({
-            type: 1 /* MAP_KEY */,
+            type: 1 /* State.MAP_KEY */,
             size,
             key: null,
             readCount: 0,
@@ -464,7 +464,7 @@ class Decoder {
             throw new DecodeError_1.DecodeError(`Max length exceeded: array length (${size}) > maxArrayLength (${this.maxArrayLength})`);
         }
         this.stack.push({
-            type: 0 /* ARRAY */,
+            type: 0 /* State.ARRAY */,
             size,
             array: new Array(size),
             position: 0,
@@ -495,7 +495,7 @@ class Decoder {
     stateIsMapKey() {
         if (this.stack.length > 0) {
             const state = this.stack[this.stack.length - 1];
-            return state.type === 1 /* MAP_KEY */;
+            return state.type === 1 /* State.MAP_KEY */;
         }
         return false;
     }

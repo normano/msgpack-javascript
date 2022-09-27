@@ -8,6 +8,9 @@ exports.defaultDecodeOptions = {};
  *
  * This is a synchronous decoding function.
  * See other variants for asynchronous decoding: {@link decodeAsync()}, {@link decodeStream()}, or {@link decodeArrayStream()}.
+ *
+ * @throws {@link RangeError} if the buffer is incomplete, including the case where the buffer is empty.
+ * @throws {@link DecodeError} if the buffer contains invalid data.
  */
 function decode(buffer, options = exports.defaultDecodeOptions) {
     const decoder = new Decoder_1.Decoder(options.extensionCodec, options.context, options.maxStrLength, options.maxBinLength, options.maxArrayLength, options.maxMapLength, options.maxExtLength);
@@ -17,6 +20,9 @@ exports.decode = decode;
 /**
  * It decodes multiple MessagePack objects in a buffer.
  * This is corresponding to {@link decodeMultiStream()}.
+ *
+ * @throws {@link RangeError} if the buffer is incomplete, including the case where the buffer is empty.
+ * @throws {@link DecodeError} if the buffer contains invalid data.
  */
 function decodeMulti(buffer, options = exports.defaultDecodeOptions) {
     const decoder = new Decoder_1.Decoder(options.extensionCodec, options.context, options.maxStrLength, options.maxBinLength, options.maxArrayLength, options.maxMapLength, options.maxExtLength);

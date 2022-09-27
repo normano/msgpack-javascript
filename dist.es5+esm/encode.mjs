@@ -9,6 +9,6 @@ var defaultEncodeOptions = {};
 export function encode(value, options) {
     if (options === void 0) { options = defaultEncodeOptions; }
     var encoder = new Encoder(options.extensionCodec, options.context, options.maxDepth, options.initialBufferSize, options.sortKeys, options.forceFloat32, options.ignoreUndefined, options.forceIntegerToFloat);
-    return encoder.encode(value);
+    return encoder.encodeSharedRef(value);
 }
 //# sourceMappingURL=encode.mjs.map

@@ -26,16 +26,26 @@ var Encoder = /** @class */ (function () {
         this.view = new DataView(new ArrayBuffer(this.initialBufferSize));
         this.bytes = new Uint8Array(this.view.buffer);
     }
-    Encoder.prototype.getUint8Array = function () {
-        return this.bytes.subarray(0, this.pos);
-    };
     Encoder.prototype.reinitializeState = function () {
         this.pos = 0;
     };
+    /**
+     * This is almost equivalent to {@link Encoder#encode}, but it returns an reference of the encoder's internal buffer and thus much faster than {@link Encoder#encode}.
+     *
+     * @returns Encodes the object and returns a shared reference the encoder's internal buffer.
+     */
+    Encoder.prototype.encodeSharedRef = function (object) {
+        this.reinitializeState();
+        this.doEncode(object, 1);
+        return this.bytes.subarray(0, this.pos);
+    };
+    /**
+     * @returns Encodes the object and returns a copy of the encoder's internal buffer.
+     */
     Encoder.prototype.encode = function (object) {
         this.reinitializeState();
         this.doEncode(object, 1);
-        return this.getUint8Array();
+        return this.bytes.slice(0, this.pos);
     };
     Encoder.prototype.doEncode = function (object, depth) {
         if (depth > this.maxDepth) {

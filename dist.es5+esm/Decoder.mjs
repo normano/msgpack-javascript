@@ -140,8 +140,8 @@ var Decoder = /** @class */ (function () {
         return new RangeError("Extra ".concat(view.byteLength - pos, " of ").concat(view.byteLength, " byte(s) found at buffer[").concat(posToShow, "]"));
     };
     /**
-     * @throws {DecodeError}
-     * @throws {RangeError}
+     * @throws {@link DecodeError}
+     * @throws {@link RangeError}
      */
     Decoder.prototype.decode = function (buffer) {
         this.reinitializeState();
@@ -530,7 +530,7 @@ var Decoder = /** @class */ (function () {
             while (stack.length > 0) {
                 // arrays and maps
                 var state = stack[stack.length - 1];
-                if (state.type === 0 /* ARRAY */) {
+                if (state.type === 0 /* State.ARRAY */) {
                     state.array[state.position] = object;
                     state.position++;
                     if (state.position === state.size) {
@@ -541,7 +541,7 @@ var Decoder = /** @class */ (function () {
                         continue DECODE;
                     }
                 }
-                else if (state.type === 1 /* MAP_KEY */) {
+                else if (state.type === 1 /* State.MAP_KEY */) {
                     if (!isValidMapKeyType(object)) {
                         throw new DecodeError("The type of key must be string or number but " + typeof object);
                     }
@@ -549,7 +549,7 @@ var Decoder = /** @class */ (function () {
                         throw new DecodeError("The key __proto__ is not allowed");
                     }
                     state.key = object;
-                    state.type = 2 /* MAP_VALUE */;
+                    state.type = 2 /* State.MAP_VALUE */;
                     continue DECODE;
                 }
                 else {
@@ -562,7 +562,7 @@ var Decoder = /** @class */ (function () {
                     }
                     else {
                         state.key = null;
-                        state.type = 1 /* MAP_KEY */;
+                        state.type = 1 /* State.MAP_KEY */;
                         continue DECODE;
                     }
                 }
@@ -602,7 +602,7 @@ var Decoder = /** @class */ (function () {
             throw new DecodeError("Max length exceeded: map length (".concat(size, ") > maxMapLengthLength (").concat(this.maxMapLength, ")"));
         }
         this.stack.push({
-            type: 1 /* MAP_KEY */,
+            type: 1 /* State.MAP_KEY */,
             size: size,
             key: null,
             readCount: 0,
@@ -614,7 +614,7 @@ var Decoder = /** @class */ (function () {
             throw new DecodeError("Max length exceeded: array length (".concat(size, ") > maxArrayLength (").concat(this.maxArrayLength, ")"));
         }
         this.stack.push({
-            type: 0 /* ARRAY */,
+            type: 0 /* State.ARRAY */,
             size: size,
             array: new Array(size),
             position: 0,
@@ -645,7 +645,7 @@ var Decoder = /** @class */ (function () {
     Decoder.prototype.stateIsMapKey = function () {
         if (this.stack.length > 0) {
             var state = this.stack[this.stack.length - 1];
-            return state.type === 1 /* MAP_KEY */;
+            return state.type === 1 /* State.MAP_KEY */;
         }
         return false;
     };

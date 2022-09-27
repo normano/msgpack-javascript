@@ -37,6 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import { Decoder } from "./Decoder.mjs";
 import { ensureAsyncIterable } from "./utils/stream.mjs";
 import { defaultDecodeOptions } from "./decode.mjs";
+/**
+ * @throws {@link RangeError} if the buffer is incomplete, including the case where the buffer is empty.
+ * @throws {@link DecodeError} if the buffer contains invalid data.
+ */
 export function decodeAsync(streamLike, options) {
     if (options === void 0) { options = defaultDecodeOptions; }
     return __awaiter(this, void 0, void 0, function () {
@@ -48,12 +52,20 @@ export function decodeAsync(streamLike, options) {
         });
     });
 }
+/**
+ * @throws {@link RangeError} if the buffer is incomplete, including the case where the buffer is empty.
+ * @throws {@link DecodeError} if the buffer contains invalid data.
+ */
 export function decodeArrayStream(streamLike, options) {
     if (options === void 0) { options = defaultDecodeOptions; }
     var stream = ensureAsyncIterable(streamLike);
     var decoder = new Decoder(options.extensionCodec, options.context, options.maxStrLength, options.maxBinLength, options.maxArrayLength, options.maxMapLength, options.maxExtLength);
     return decoder.decodeArrayStream(stream);
 }
+/**
+ * @throws {@link RangeError} if the buffer is incomplete, including the case where the buffer is empty.
+ * @throws {@link DecodeError} if the buffer contains invalid data.
+ */
 export function decodeMultiStream(streamLike, options) {
     if (options === void 0) { options = defaultDecodeOptions; }
     var stream = ensureAsyncIterable(streamLike);

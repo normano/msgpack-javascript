@@ -14,8 +14,16 @@ export declare class Encoder<ContextType = undefined> {
     private view;
     private bytes;
     constructor(extensionCodec?: ExtensionCodecType<ContextType>, context?: ContextType, maxDepth?: number, initialBufferSize?: number, sortKeys?: boolean, forceFloat32?: boolean, ignoreUndefined?: boolean, forceIntegerToFloat?: boolean);
-    private getUint8Array;
     private reinitializeState;
+    /**
+     * This is almost equivalent to {@link Encoder#encode}, but it returns an reference of the encoder's internal buffer and thus much faster than {@link Encoder#encode}.
+     *
+     * @returns Encodes the object and returns a shared reference the encoder's internal buffer.
+     */
+    encodeSharedRef(object: unknown): Uint8Array;
+    /**
+     * @returns Encodes the object and returns a copy of the encoder's internal buffer.
+     */
     encode(object: unknown): Uint8Array;
     private doEncode;
     private ensureBufferSizeToWrite;
